@@ -1,0 +1,9 @@
+node_modules
+.git
+.next
+.DS_Store
+*.md
+.env
+.env.*
+storage
+backups

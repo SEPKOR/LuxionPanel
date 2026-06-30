@@ -1,0 +1,23 @@
+services:
+  luxion:
+    build: .
+    container_name: luxion-os
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:3000"
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=file:/app/prisma/prod.db
+      - LUXION_STORAGE_PATH=/app/storage
+      - LUXION_BACKUP_PATH=/app/backups
+    volumes:
+      - luxion_storage:/app/storage
+      - luxion_backups:/app/backups
+      - luxion_data:/app/prisma
+
+volumes:
+  luxion_storage:
+  luxion_backups:
+  luxion_data:

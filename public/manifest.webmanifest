@@ -1,0 +1,10 @@
+{
+  "name": "Luxion OS",
+  "short_name": "Luxion",
+  "description": "A lightweight self-hosted personal dashboard.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050607",
+  "theme_color": "#050607",
+  "icons": []
+}

@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String         @id @default(cuid())
+  email            String         @unique
+  name             String?
+  password         String
+  role             String         @default("user")
+  timezone         String         @default("UTC")
+  language         String         @default("en")
+  theme            String         @default("dark")
+  animations       Boolean        @default(true)
+  compactMode      Boolean        @default(false)
+  weatherLocation  String         @default("Jakarta")
+  modulePreferences String?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  notes        Note[]
+  tasks        Task[]
+  bookmarks    Bookmark[]
+  apiKeys      ApiKey[]
+  chatMessages ChatMessage[]
+  musicTracks  MusicTrack[]
+}
+
+model Note {
+  id        String   @id
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  body      String
+  category  String
+  tags      String   @default("[]")
+  pinned    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Task {
+  id        String   @id
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  priority  String
+  progress  Int      @default(0)
+  due       String?
+  done      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Bookmark {
+  id        String   @id
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  url       String
+  category  String
+  createdAt DateTime @default(now())
+}
+
+model ApiKey {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider  String   @default("openai")
+  label     String
+  baseUrl   String
+  apiKey    String
+  model     String
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ChatMessage {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role       String
+  content    String
+  toolName   String?
+  toolResult String?
+  createdAt  DateTime @default(now())
+}
+
+model StoredFile {
+  id          String  @id
+  name        String
+  diskName    String
+  thumbnailName String?
+  type        String
+  size        Int
+  folder      String
+  createdAt   DateTime @default(now())
+}
+
+model MusicTrack {
+  id        String   @id
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  artist    String
+  album     String
+  duration  String
+  format    String
+  accent    String
+  fileUrl   String?
+  createdAt DateTime @default(now())
+}
